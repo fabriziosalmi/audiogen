@@ -23,21 +23,22 @@ def extract_features(file_path):
     return features
 
 def process_folder(folder_path):
-    """
-    Process all files in a folder and extract their features.
-    :param folder_path: Path to the folder containing audio files.
-    :return: DataFrame with extracted features for all files.
-    """
     features_list = []
-    for file in os.listdir(folder_path):
-        if file.endswith('.wav'):
-            file_path = os.path.join(folder_path, file)
-            features = extract_features(file_path)
-            features['file'] = file
-            features_list.append(features)
+    for subdir, dirs, files in os.walk(folder_path):
+        sound_type = os.path.basename(subdir)
+        for file in files:
+            if file.endswith('.wav'):
+                file_path = os.path.join(subdir, file)
+                features = extract_features(file_path)
+                features['file'] = file
+                features['sound_type'] = sound_type  # Add sound type label
+                features_list.append(features)
     return pd.DataFrame(features_list)
+
+
 
 if __name__ == "__main__":
     input_folder = 'tagged_sounds'
     features_df = process_folder(input_folder)
     features_df.to_csv('extracted_features.csv', index=False)
+

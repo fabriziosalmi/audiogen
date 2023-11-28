@@ -1,7 +1,10 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.ensemble import RandomForestClassifier
 import joblib
+import warnings
+warnings.filterwarnings('ignore', category=FutureWarning)
+
 
 def load_features(features_file):
     """
@@ -13,17 +16,19 @@ def load_features(features_file):
 
 def train_model(features_df):
     """
-    Train a machine learning model on the provided features.
-    :param features_df: DataFrame containing features and target values.
+    Train a classification model on the provided features.
+    :param features_df: DataFrame containing features and sound type labels.
     :return: Trained model.
     """
-    # Assuming the target column is named 'target'
-    X = features_df.drop(columns=['file', 'target'])
-    y = features_df['target']
+    if 'sound_type' not in features_df.columns:
+        raise ValueError("The 'sound_type' column is missing from the features DataFrame.")
+
+    X = features_df.drop(columns=['file', 'sound_type'])
+    y = features_df['sound_type']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
-    model = RandomForestRegressor(n_estimators=100, random_state=42)
+    model = RandomForestClassifier(n_estimators=100, random_state=42)
     model.fit(X_train, y_train)
     print(f"Model Training Accuracy: {model.score(X_test, y_test)}")
 
@@ -34,4 +39,5 @@ if __name__ == "__main__":
     features_df = load_features(features_file)
 
     model = train_model(features_df)
-    joblib.dump(model, 'audio_model.pkl')
+    joblib.dump(model, 'sound_type_classifier.pkl')
+

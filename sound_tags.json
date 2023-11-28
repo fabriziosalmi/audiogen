@@ -1,0 +1,14 @@
+{
+    "bass_drum": "bd",
+    "clap": "cp",
+    "crash": "cr",
+    "hi_hat": "hh",
+    "high_tom": "ht",
+    "low_tom": "lt",
+    "mid_tom": "mt",
+    "open_hat": "oh",
+    "ride": "rd",
+    "rim_shot": "rs",
+    "snare_drum": "sd"
+}
+
