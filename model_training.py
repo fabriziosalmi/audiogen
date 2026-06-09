@@ -12,7 +12,10 @@ def load_features(features_file):
     :param features_file: Path to the CSV file containing extracted features.
     :return: DataFrame with features.
     """
-    return pd.read_csv(features_file)
+    df = pd.read_csv(features_file)
+    if df.empty:
+        raise ValueError("The input CSV file is empty.")
+    return df
 
 def train_model(features_df):
     """
