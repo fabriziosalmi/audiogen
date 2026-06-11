@@ -29,6 +29,9 @@ def train_model(features_df):
     X = features_df.drop(columns=['file', 'sound_type'])
     y = features_df['sound_type']
 
+    if X.empty:
+        raise ValueError("No feature columns available for training after dropping 'file' and 'sound_type'.")
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     model = RandomForestClassifier(n_estimators=100, random_state=42)
