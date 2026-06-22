@@ -32,6 +32,10 @@ def train_model(features_df):
     if X.empty:
         raise ValueError("No feature columns available for training after dropping 'file' and 'sound_type'.")
 
+    # Validate that X has at least one non-constant column with variation
+    if (X.nunique() <= 1).all():
+        raise ValueError("All feature columns are constant or empty; model cannot be trained.")
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
     model = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -46,4 +50,3 @@ if __name__ == "__main__":
 
     model = train_model(features_df)
     joblib.dump(model, 'sound_type_classifier.pkl')
-
